@@ -1,0 +1,32 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class TopologySort {
+
+	static final int VERTEX = 7, EDGE = 9;
+	static List<Integer>[] list;
+
+	public static void main(String[] args) {
+
+		list = new ArrayList[VERTEX + 1];
+		for (int i = 1; i < VERTEX; i++)
+			list[i] = new ArrayList<>();
+		
+		list[1].add(2);
+		list[1].add(5);
+		list[2].add(3);
+		list[3].add(4);
+		list[4].add(6);
+		list[5].add(6);
+		list[6].add(7);
+
+		for (int i = 0; i < VERTEX; i++) {
+			for (int j = 0; j < list[i].size(); j++) {
+				System.out.print(list[i].get(j) + " ");
+			}
+			System.out.println();
+		}
+
+	}
+
+}

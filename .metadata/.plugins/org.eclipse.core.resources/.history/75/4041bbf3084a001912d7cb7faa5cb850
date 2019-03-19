@@ -1,0 +1,14 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class TopologySort {
+
+	static final int V = 7; //Á¤Á¡ 7°³
+
+	public static void main(String[] args) {
+		
+		List<Integer>[] list;
+		
+	}
+
+}

@@ -1,0 +1,11 @@
+import java.util.List;
+
+public class TopologySort {
+	
+	List<Integer>[] list;
+	
+	public static void main(String[] args) {
+
+	}
+
+}

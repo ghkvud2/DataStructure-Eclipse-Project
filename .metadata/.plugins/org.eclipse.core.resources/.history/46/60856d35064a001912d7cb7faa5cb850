@@ -1,0 +1,12 @@
+import java.util.List;
+
+public class TopologySort {
+
+	static final int VERTEX = 8, EDGE = 9;
+	static List<Integer>[] list;
+
+	public static void main(String[] args) {
+
+	}
+
+}
