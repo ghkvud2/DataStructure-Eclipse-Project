@@ -1,14 +1,16 @@
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Stack;
 
 public class TopologicalSort {
 
 	static final int V = 7;
+	static Stack<Integer> stack = new Stack<>();
 	static List<Integer>[] list = new ArrayList[V + 1];
-	static int[] indegree = new int[V + 1];
+	static boolean[] finished = new boolean[V + 1];
+	static boolean[] visited = new boolean[V + 1];
+	static boolean isCycle = false;
 
 	public static void main(String[] args) {
 
@@ -16,63 +18,39 @@ public class TopologicalSort {
 			list[i] = new ArrayList<Integer>();
 
 		list[5].add(1);
-		indegree[1]++;
-
 		list[1].add(2);
-		indegree[2]++;
-
 		list[1].add(4);
-		indegree[4]++;
-
 		list[5].add(3);
-		indegree[3]++;
-
 		list[3].add(4);
-		indegree[4]++;
-
 		list[4].add(7);
-		indegree[7]++;
-
 		list[6].add(3);
-		indegree[3]++;
 
-		topologicalSort();
-
+		for (int i = 1; i <= V; i++) {
+			if (!finished[i])
+				dfs(i);
+		}
+		if (isCycle)
+			System.out.println("사이클이 있는 그래프입니다.");
+		else {
+			while (!stack.isEmpty())
+				System.out.print(stack.pop() + " ");
+		}
 	}
 
-	static void topologicalSort() {
+	static void dfs(int v) {
 
-		Queue<Integer> q = new LinkedList<>();
-		List<Integer> result = new ArrayList<>();
+		visited[v] = true;
+		for (int adj : list[v]) {
 
-		for (int i = 1; i <= V; i++) {
-			if (indegree[i] == 0)
-				q.offer(i);
+			if (!visited[adj])
+				dfs(adj);
+
+			else if (!finished[adj])
+				isCycle = true;
 		}
 
-		for (int i = 1; i <= V; i++) {
-
-			if (q.isEmpty()) {
-				System.out.println("사이클이 있는 그래프입니다.");
-				return;
-			}
-
-			int node = q.poll();
-			result.add(node);
-
-			for (int j = 0; j < list[node].size(); j++) {
-
-				int adj = list[node].get(j);
-				indegree[adj] -= 1;
-
-				if (indegree[adj] == 0)
-					q.offer(adj);
-
-			}
-		}
-		for (int node : result)
-			System.out.print(node + " ");
-
+		finished[v] = true;
+		stack.push(v);
 	}
 
 }
