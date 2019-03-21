@@ -77,7 +77,7 @@ public class InfixToPostfix {
 		int op1Prec = getOpPrec(op1);
 		int op2Prec = getOpPrec(op2);
 
-		if (op1Prec > op2Prec)
+		if (op1Prec >= op2Prec)
 			return true;
 		else
 			return false;
