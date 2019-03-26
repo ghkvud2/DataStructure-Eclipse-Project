@@ -44,7 +44,7 @@ public class UnionFind {
             return false;
     }
  
-    //두 노드의 부모노드를 합침
+    //두 노드의 부모노드를 합침.
     public static void union(int[] parent, int node1, int node2) {
  
         a = getParent(parent, node1);
