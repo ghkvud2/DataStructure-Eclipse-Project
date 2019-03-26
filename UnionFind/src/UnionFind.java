@@ -47,12 +47,10 @@ public class UnionFind {
     //두 노드의 부모노드를 합침
     public static void union(int[] parent, int node1, int node2) {
  
-        int parent1 = getParent(parent, node1);
-        int parent2 = getParent(parent, node2);
+        a = getParent(parent, node1);
+        b = getParent(parent, node2);
  
-        if (parent1 < parent2)
-            parent[parent2] = parent1;
-        else
-            parent[parent1 ] = parent2;
+        if(a != b)
+	parent[a] = b;
     }
 }
