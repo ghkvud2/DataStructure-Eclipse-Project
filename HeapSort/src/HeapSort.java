@@ -5,8 +5,13 @@ public class HeapSort {
 
 		int[] arr = new int[] { 6, 2, 4, 9, 7, 5, 8 };
 		int length = arr.length;
-		heapSort(arr, length);
+		heapSort(arr, length );
 		show(arr, length);
+
+//		int[] arr = new int[] { 4, 14, 7, 2, 8, 1 };
+//		int length = arr.length;
+//		buildMaxHeap(arr, length);
+//		show(arr, length);
 	}
 
 	public static void buildMaxHeap(int[] arr, int length) {
@@ -16,30 +21,62 @@ public class HeapSort {
 		}
 	}
 
-	public static void heapify(int[] arr, int root, int length) {
+//	public static void heapify(int[] arr, int root, int length) {
+//
+//		int parent = root;
+//		int leftChild = parent * 2 + 1;
+//		int rightChild = parent * 2 + 2;
+//
+//		if (leftChild < length && arr[parent] < arr[leftChild])
+//			parent = leftChild;
+//
+//		if (rightChild < length && arr[parent] < arr[rightChild])
+//			parent = rightChild;
+//
+//		if (parent != root) {
+//			swap(arr, parent, root);
+//			heapify(arr, parent, length);
+//		}
+//	}
 
-		int parent = root;
-		int leftChild = parent * 2 + 1;
-		int rightChild = parent * 2 + 2;
+	public static void heapify(int[] arr, int parent, int length) {
 
-		if (leftChild < length && arr[parent] < arr[leftChild])
-			parent = leftChild;
+		// 자식 노드가 없는 경우
+		if (parent * 2 + 1 >= length)
+			return;
 
-		if (rightChild < length && arr[parent] < arr[rightChild])
-			parent = rightChild;
+		// 자식 노드들 중, 더 큰 자식노드 찾기
+		int child = parent * 2 + 1;
+		if (child + 1 < length && arr[child] < arr[child + 1])
+			child += 1;
 
-		if (parent != root) {
-			swap(arr, parent, root);
-			heapify(arr, parent, length);
+		// 부모노드 < 자식노드 일 경우 위치를 바꿔줌
+		if (arr[parent] < arr[child]) {
+			int temp = arr[parent];
+			arr[parent] = arr[child];
+			arr[child] = temp;
 		}
+		heapify(arr, child, length);
 	}
+
+//	public static void heapSort(int[] arr, int length) {
+//
+//		buildMaxHeap(arr, length);
+//
+//		for (int i = length - 1; i > 0; i--) {
+//			swap(arr, 0, i);
+//			heapify(arr, 0, i - 1);
+//		}
+//	}
 
 	public static void heapSort(int[] arr, int length) {
 
 		buildMaxHeap(arr, length);
 
 		for (int i = length - 1; i > 0; i--) {
-			swap(arr, 0, i);
+			int temp = arr[0];
+			arr[0] = arr[i];
+			arr[i] = temp;
 			heapify(arr, 0, i - 1);
 		}
 	}
@@ -57,4 +94,3 @@ public class HeapSort {
 	}
 
 }
-

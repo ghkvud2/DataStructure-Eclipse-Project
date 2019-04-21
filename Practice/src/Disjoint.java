@@ -1,6 +1,7 @@
-public class UnionFind {
 
-	static int N = 8;
+public class Disjoint {
+
+	static int N = 10;
 
 	public static void main(String[] args) {
 
@@ -8,13 +9,6 @@ public class UnionFind {
 		int[] rank = new int[N];
 
 		init(parent, rank);
-
-		union(parent, rank, 0, 1);
-		union(parent, rank, 1, 2);
-		union(parent, rank, 2, 3);
-		union(parent, rank, 3, 4);
-
-		showParent(parent);
 
 	}
 
@@ -34,35 +28,20 @@ public class UnionFind {
 		else if (uRank > vRank)
 			parent[vRoot] = uRoot;
 		else {
-			parent[uRoot] = vRoot;
+			parent[vRoot] = uRoot;
 			rank[vRoot] += 1;
 		}
-
 	}
 
 	public static int find(int[] parent, int u) {
-
-		if (u == parent[u])
+		if (parent[u] == u)
 			return u;
 		else
 			return parent[u] = find(parent, parent[u]);
 	}
 
-	public static void showParent(int[] parent) {
-
-		System.out.println("       [각 노드의 부모]");
-		for (int i = 0; i < N; i++)
-			System.out.print("[" + i + "]");
-		System.out.println();
-
-		for (int i = 0; i < N; i++)
-			System.out.print(" " + parent[i] + " ");
-		System.out.println();
-		System.out.println();
-	}
-
 	public static void init(int[] parent, int[] rank) {
-		for (int i = 0; i < N; i++) {
+		for (int i = 0; i < parent.length; i++) {
 			parent[i] = i;
 			rank[i] = 1;
 		}
