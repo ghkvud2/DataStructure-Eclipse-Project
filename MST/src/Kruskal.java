@@ -34,7 +34,6 @@ public class Kruskal {
 			if (find(parent, edge.u) != find(parent, edge.v)) {
 				union(parent, rank, edge.u, edge.v);
 				sum += edge.weight;
-				System.out.println(edge.weight+"를 더한다.");
 			}
 		}
 		System.out.println(sum);
