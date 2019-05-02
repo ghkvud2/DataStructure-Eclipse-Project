@@ -1,131 +1,121 @@
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.PriorityQueue;
 
 public class Prim {
 
-	static int N = 9;
+	static class Node {
+		int dest;
+		int weight;
 
-	public static void main(String[] args) {
-
-		Graph graph = new Graph(N + 1);
-		graph.addEdge(1, 2, 4);
-		graph.addEdge(2, 3, 8);
-		graph.addEdge(3, 4, 7);
-		graph.addEdge(4, 5, 9);
-		graph.addEdge(5, 6, 10);
-		graph.addEdge(6, 7, 2);
-		graph.addEdge(7, 8, 1);
-		graph.addEdge(8, 9, 7);
-		graph.addEdge(1, 8, 8);
-		graph.addEdge(2, 8, 11);
-		graph.addEdge(3, 6, 4);
-		graph.addEdge(3, 9, 2);
-		graph.addEdge(4, 6, 14);
-		graph.addEdge(7, 9, 6);
-
-		getMST(graph, N + 1);
+		public Node(int dest, int weight) {
+			this.dest = dest;
+			this.weight = weight;
+		}
 	}
 
-	public static void getMST(Graph graph, int size) {
+	static class Node2 implements Comparable<Node2> {
+		int key;
+		int node;
+		int prev;
 
-		boolean[] mst = new boolean[size];
-		LinkedVertex[] linkedVertex = new LinkedVertex[size];
-		PriorityQueue<LinkedVertex> q = new PriorityQueue<>();
+		public Node2(int key, int node, int prev) {
+			this.key = key;
+			this.node = node;
+			this.prev = prev;
+		}
 
-		for (int i = 1; i < size; i++)
-			linkedVertex[i] = new LinkedVertex(i, -1, Integer.MAX_VALUE);
+		public int compareTo(Node2 o) {
+			if (this.key < o.key)
+				return -1;
+			else if (this.key == o.key) {
 
-		linkedVertex[1].parent = 1;
-		linkedVertex[1].key = 0;
-		mst[1] = true;
+				return this.node - o.node;
 
-		for (int i = 1; i < size; i++)
-			q.offer(linkedVertex[i]);
+			} else
+				return 1;
+		}
+	}
+
+	int size;
+	Node2[] status;
+	List<List<Node>> list;
+
+	public Prim(int size) {
+
+		this.size = size + 1;
+		status = new Node2[this.size];
+		list = new ArrayList<>();
+
+		for (int i = 0; i < this.size; i++) {
+			status[i] = new Node2(Integer.MAX_VALUE, i, -1);
+			List<Node> item = new ArrayList<>();
+			list.add(item);
+		}
+	}
+
+	public void addEdge(int src, int dest, int weight) {
+		list.get(src).add(new Node(dest, weight));
+		list.get(dest).add(new Node(src, weight));
+	}
+
+	public void primMST(int start) {
 
 		int sum = 0;
+		status[start].key = 0;
+		status[start].prev = 0;
+
+		boolean[] mst = new boolean[this.size];
+		PriorityQueue<Node2> q = new PriorityQueue<>();
+
+		for (int i = 1; i < this.size; i++)
+			q.offer(status[i]);
+
 		while (!q.isEmpty()) {
 
-			LinkedVertex vertex = q.poll();
-			mst[vertex.vertex] = true;
-			sum += vertex.key;
+			Node2 node = q.poll();
+			mst[node.node] = true;
+			sum += node.key;
 
-			for (int i = 0; i < graph.adj[vertex.vertex].size(); i++) {
+			for (int i = 0; i < list.get(node.node).size(); i++) {
 
-				Node adj = graph.adj[vertex.vertex].get(i);
+				Node adj = list.get(node.node).get(i);
 
 				if (!mst[adj.dest]) {
-
-					if (adj.weight < linkedVertex[adj.dest].key) {
-						q.remove(linkedVertex[adj.dest]);
-						linkedVertex[adj.dest].key = adj.weight;
-						linkedVertex[adj.dest].parent = vertex.vertex;
-						q.offer(linkedVertex[adj.dest]);
+					if (status[adj.dest].key > adj.weight) {
+						q.remove(status[adj.dest]);
+						status[adj.dest].key = adj.weight;
+						status[adj.dest].prev = node.node;
+						q.add(status[adj.dest]);
 					}
 				}
 			}
 		}
-		for (int i = 1; i < size; i++)
-			System.out.println(linkedVertex[i].vertex + " - " + linkedVertex[i].parent);
-
-		System.out.println("MST Value : " + sum);
-	}
-}
-
-class Graph {
-
-	List<Node>[] adj;
-
-	public Graph(int size) {
-
-		this.adj = new ArrayList[size];
-
-		for (int i = 0; i < size; i++)
-			adj[i] = new ArrayList<>();
+		for (int i = 1; i < this.size; i++) {
+			if (i != start)
+				System.out.println((char) (status[i].prev - 1 + 'a') + " -> " + (char) (i - 1 + 'a'));
+		}
+		System.out.println("Prim MST : " + sum);
 	}
 
-	public void addEdge(int src, int dest, int weight) {
+	public static void main(String[] args) {
+		Prim prim = new Prim(9);
+		prim.addEdge(1, 2, 4);
+		prim.addEdge(2, 3, 8);
+		prim.addEdge(3, 4, 7);
+		prim.addEdge(4, 5, 9);
+		prim.addEdge(5, 6, 10);
+		prim.addEdge(6, 7, 2);
+		prim.addEdge(7, 8, 1);
+		prim.addEdge(8, 9, 7);
+		prim.addEdge(1, 8, 8);
+		prim.addEdge(2, 8, 11);
+		prim.addEdge(3, 6, 4);
+		prim.addEdge(3, 9, 2);
+		prim.addEdge(4, 6, 14);
+		prim.addEdge(7, 9, 6);
 
-		Node from = new Node(src, weight);
-		Node to = new Node(dest, weight);
-
-		adj[src].add(to);
-		adj[dest].add(from);
-	}
-}
-
-class Node {
-	int dest;
-	int weight;
-
-	public Node(int dest, int weight) {
-		this.dest = dest;
-		this.weight = weight;
-	}
-}
-
-class LinkedVertex implements Comparable<LinkedVertex> {
-
-	int vertex;
-	int parent;
-	int key;
-
-	public LinkedVertex(int vertex, int parent, int key) {
-		this.vertex = vertex;
-		this.parent = parent;
-		this.key = key;
+		prim.primMST(1);
 	}
 
-	@Override
-	public int compareTo(LinkedVertex o) {
-		if (this.key < o.key)
-			return -1;
-		else if (this.key == o.key) {
-
-			return this.vertex - o.vertex;
-
-		} else
-			return 1;
-	}
 }
